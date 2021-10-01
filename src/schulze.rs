@@ -8,7 +8,6 @@ use super::plurality::PluralityTally;
 use super::result::CountedCandidates;
 use super::result::RankedCandidate;
 use super::result::RankedWinners;
-use super::Numeric;
 use std::hash::Hash;
 use std::ops::AddAssign;
 
@@ -219,7 +218,7 @@ where
                                 if dji != &zero {
                                     *dij / *dji
                                 } else {
-                                    C::max_value()
+                                    C::zero()
                                 }
                             }
                         };
@@ -326,9 +325,7 @@ where
     // Check to make sure that if we are using ratio, we have a bounded and fractional type
     fn check_types(variant: &Variant) {
         if let Variant::Ratio = variant {
-            if !C::fraction() || C::max_value() == C::zero() {
-                panic!("tallystick::schulze: Variant::Ratio must be used with a type that is bounded and fractional.");
-            }
+            panic!("tallystick::schulze: Variant::Ratio must be used with a type that is bounded and fractional.");
         }
     }
 }

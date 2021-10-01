@@ -1,7 +1,7 @@
-use super::Numeric;
 use num_traits::Num;
 
-/// A quota defines how many votes are required to win an election in relation to the total number of votes cast. `nightly`
+/// A quota defines how many votes are required to win an election in relation to the total number
+/// of votes cast.
 pub enum Quota<C> {
     /// Droop quota. It is defined as:
     ///
@@ -55,7 +55,7 @@ pub enum Quota<C> {
     Static(C),
 }
 
-impl<C: Numeric + Num + Clone> Quota<C> {
+impl<C: Num + Clone> Quota<C> {
     /// Compute the threshold needed to be elected for the given quota.
     ///
     /// Note that total-votes should be the number of votes counted in the tally.
@@ -66,12 +66,9 @@ impl<C: Numeric + Num + Clone> Quota<C> {
     /// This method will panic if `Quota::Hagenbach` is used with an integer (non Real) count type.
     pub fn threshold(&self, total_votes: C, num_winners: C) -> C {
         match self {
-            Quota::Droop => (total_votes / (num_winners + C::one())).floor() + C::one(),
+            Quota::Droop => (total_votes / (num_winners + C::one())) + C::one(),
             Quota::Hagenbach => {
-                if !C::fraction() {
-                    panic!("tallystick::Quota::Hagenbach cannot be used with an integer count type. Please use a float or a rational.")
-                }
-                total_votes / (num_winners + C::one())
+                panic!("tallystick::Quota::Hagenbach cannot be used with an integer count type. Please use a float or a rational.")
             }
             Quota::Hare => total_votes / num_winners,
             Quota::Imperiali => total_votes / (num_winners + C::one() + C::one()),

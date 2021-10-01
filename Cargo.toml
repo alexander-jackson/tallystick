@@ -16,12 +16,11 @@ codecov = { repository = "phayes/tallystick", branch = "master", service = "gith
 maintenance = { status = "actively-developed" }
 
 [features]
-default = ["nightly", "serde"]
-nightly = []
+default = ["serde"]
 rational = ["num-rational"]
 
 [package.metadata.docs.rs]
-features = ["nightly", "rational", "serde"]
+features = ["rational", "serde"]
 
 [dependencies]
 failure = "0.1.6"

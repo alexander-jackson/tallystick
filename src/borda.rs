@@ -3,7 +3,6 @@ use super::plurality::PluralityTally;
 use super::result::CountedCandidates;
 use super::result::RankedCandidate;
 use super::result::RankedWinners;
-use super::Numeric;
 use super::TallyError;
 use hashbrown::HashMap;
 use hashbrown::HashSet;
@@ -110,7 +109,7 @@ pub enum Variant<C> {
     Custom(Box<dyn Fn(usize, usize, usize) -> C>),
 }
 
-impl<C: Numeric + Num + NumCast> Variant<C> {
+impl<C: Num + NumCast> Variant<C> {
     /// Get the number of points for a candidate at a certain position on a ballot.
     ///
     /// - `candidate_position` is the position of the candidate on the marked ballot. It is `0` for the 1st candidate, `1` for the second candidate etc.
@@ -125,12 +124,7 @@ impl<C: Numeric + Num + NumCast> Variant<C> {
             Variant::Borda => C::from(num_candidates - candidate_position - 1).expect(C_FROM_PANIC),
             Variant::ClassicBorda => C::from(num_candidates - candidate_position).expect(C_FROM_PANIC),
             Variant::Dowdall => {
-                if !C::fraction() {
-                    panic!(
-                        "tallystick::borda::Variant::Dowdall cannot be used with an integer count type. Please use a float or a rational."
-                    )
-                }
-                C::one() / C::from(candidate_position + 1).expect(C_FROM_PANIC)
+                panic!("tallystick::borda::Variant::Dowdall cannot be used with an integer count type. Please use a float or a rational.")
             }
             Variant::ModifiedClassicBorda => C::from(num_marked - candidate_position).expect(C_FROM_PANIC),
             Variant::Custom(boxed_func) => boxed_func(candidate_position, num_candidates, num_marked),

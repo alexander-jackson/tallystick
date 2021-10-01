@@ -1,4 +1,3 @@
-use super::Numeric;
 use super::RankedCandidate;
 use super::RankedWinners;
 use crate::Transfer;
@@ -13,8 +12,8 @@ use std::ops::AddAssign;
 #[derive(Debug)]
 struct WeightedVote<T, C>
 where
-    T: Eq + Clone + Hash,                                       // Candidate
-    C: Copy + PartialOrd + AddAssign + Num + NumCast + Numeric, // vote count type
+    T: Eq + Clone + Hash,                             // Candidate
+    C: Copy + PartialOrd + AddAssign + Num + NumCast, // vote count type
 {
     weight: C,
     remaining: Vec<T>,
@@ -24,8 +23,8 @@ pub type DefaultTally<T> = Tally<T, u64>;
 
 pub struct Tally<T, C>
 where
-    T: Eq + Clone + Hash,                                       // Candidate
-    C: Copy + PartialOrd + AddAssign + Num + NumCast + Numeric, // vote count type
+    T: Eq + Clone + Hash,                             // Candidate
+    C: Copy + PartialOrd + AddAssign + Num + NumCast, // vote count type
 {
     running_total: VoteTree<T, C>,
     transfer: Transfer,
@@ -33,8 +32,8 @@ where
 
 impl<T, C> Tally<T, C>
 where
-    T: Eq + Clone + Hash,                                             // Candidate
-    C: Copy + PartialOrd + Ord + AddAssign + Num + NumCast + Numeric, // vote count type
+    T: Eq + Clone + Hash,                                   // Candidate
+    C: Copy + PartialOrd + Ord + AddAssign + Num + NumCast, // vote count type
 {
     pub fn new(transfer: Transfer) -> Self {
         Tally {
@@ -66,7 +65,7 @@ where
     }
 
     pub fn tally_ranked(&self) -> Vec<RankedCandidate<T>> {
-        let max = C::max_value();
+        let max = C::zero();
 
         let candidates = self.running_total.candidates();
         let mut inverse_ranked = Vec::<RankedCandidate<T>>::with_capacity(candidates.len());

@@ -2,7 +2,6 @@
 //! This data structure is taken from https://gitlab.com/mbq/wybr,
 //! with a special thanks to mbq.
 
-use super::Numeric;
 use hashbrown::HashMap;
 use hashbrown::HashSet;
 use num_traits::cast::NumCast;
@@ -23,8 +22,8 @@ pub enum Transfer {
 
 pub(crate) struct VoteTree<T, C = u64>
 where
-    T: Eq + Clone + Hash,                                       // Candidate type
-    C: Copy + PartialOrd + AddAssign + Num + NumCast + Numeric, // Count type
+    T: Eq + Clone + Hash,                             // Candidate type
+    C: Copy + PartialOrd + AddAssign + Num + NumCast, // Count type
 {
     pub(crate) count: C,
     children: HashMap<T, VoteTree<T, C>>,
@@ -33,8 +32,8 @@ where
 
 impl<T, C> VoteTree<T, C>
 where
-    T: Eq + Clone + Hash,                                       // Candidate type
-    C: Copy + PartialOrd + AddAssign + Num + NumCast + Numeric, // Count type
+    T: Eq + Clone + Hash,                             // Candidate type
+    C: Copy + PartialOrd + AddAssign + Num + NumCast, // Count type
 {
     pub(crate) fn new() -> VoteTree<T, C> {
         VoteTree {
